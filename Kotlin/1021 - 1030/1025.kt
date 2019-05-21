@@ -2,7 +2,7 @@ import java.util.*
 
 
 //Still working on that. Runtime Error
-fun partition (a: MutableList<Int>, esq: Int, dir: Int): Pair<MutableList<Int>, Pair<Int, Int>> {
+fun partition (a: IntArray, esq: Int, dir: Int): Int {
     var i = esq; var j = dir;
     var pivot = a[(i + j)/2]; /* obtem o pivo x */
     var aux: Int
@@ -14,36 +14,36 @@ fun partition (a: MutableList<Int>, esq: Int, dir: Int): Pair<MutableList<Int>, 
             i++; j--
         }
     } while (i <= j)
-    return Pair(a, Pair(i, j))
+    return i
 }
 
-fun quickSort(a: MutableList<Int>, esq: Int, dir: Int): MutableList<Int> {
-    var part = partition(a, esq, dir); var newA = part.first
-    var i = part.second.first; var j = part.second.second
+fun quickSort(a: IntArray, esq: Int, dir: Int) {
+    var index = partition(a, esq, dir)
 
-    if (esq < j) newA = quickSort(newA, j, esq);
-    if (i < dir) newA = quickSort(newA, i, dir);
-
-    return newA
+    if (esq < index - 1) quickSort(a, esq, index-1);
+    if (index < dir) quickSort(a, index, dir);
 }
 
 fun main (args: Array<String>) {
     var n: Int; var q: Int
     var count = 1; var verify: Int
     var input: List<String>
-    var numbers: MutableList<Int> = mutableListOf<Int>()
-    var queries: MutableList<Int> = mutableListOf<Int>()
+    var numbers: IntArray
+    var queries: IntArray
 
     do {
         input = readLine()!!.split(' ')
         n = input[0].toInt(); q = input[1].toInt()
+        numbers = IntArray(n)
+        queries = IntArray(q)
+
         if (n != 0 || q != 0) {
             for (i in 0 until n)
-                numbers.add(readLine()!!.toInt())
+                numbers.set(i, readLine()!!.toInt())
             for (i in 0 until q)
-                queries.add(readLine()!!.toInt())
+                queries.set(i, readLine()!!.toInt())
 
-            numbers = quickSort(numbers, 0, numbers.size - 1)
+            quickSort(numbers, 0, numbers.size - 1)
 
             println("CASE# " + count + ":")
             for (i in 0 until q) {
@@ -59,9 +59,6 @@ fun main (args: Array<String>) {
                     println(queries[i].toString() + " not found")
             }
             count++
-
-            numbers = mutableListOf<Int>()
-            queries = mutableListOf<Int>()
         }
     }while (n != 0 && q != 0)
 }
