@@ -1,7 +1,5 @@
 import java.util.*
 
-
-//Still working on that. Runtime Error
 fun partition (a: IntArray, esq: Int, dir: Int): Int {
     var i = esq; var j = dir;
     var pivot = a[(i + j)/2]; /* obtem o pivo x */
@@ -47,16 +45,16 @@ fun main (args: Array<String>) {
 
             println("CASE# " + count + ":")
             for (i in 0 until q) {
-                verify = 0
-                for (j in 0 until n) {
-                    if (queries[i] == numbers[j]) {
-                        println(queries[i].toString() + " found at " + (j + 1))
-                        verify = 1
-                        break
-                    }
+                verify = numbers.binarySearch(queries[i])
+                if (verify >= 0) {
+                    while (verify >= 0 && numbers[verify] == queries[i])
+                        verify--
+                    verify++
+                    println(queries[i].toString() + " found at " + (verify + 1))
                 }
-                if (verify == 0)
+                else {
                     println(queries[i].toString() + " not found")
+                }
             }
             count++
         }
